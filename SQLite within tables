@@ -1,0 +1,33 @@
+1
+CREATE TABLE "genecoors" ("chromosome" CHAR, "start" INTEGER, "end" INTEGER, "strand" BLOB, "geneid" CHAR)
+
+2
+SELECT count(*) FROM genecoors where chromosome='Chr1' and strand='+'
+Answer: 4681
+
+3
+SELECT geneid FROM genecoors where chromosome='Chr4' and start>345000 and end<350000
+Answer: AT4G00810
+
+4
+b. I would use 'CHAR' for genename and 'VARCHAR' for annotation.
+CREATE TABLE "geneannotation" ("genename" CHAR, "annotation" VARCHAR)
+
+5
+SELECT genename,annotation FROM geneannotation where genename in (SELECT geneid FROM genecoors where chromosome='Chr1' and strand='+')
+
+6
+SELECT count(*) From geneannotation where annotation LIKE '%kinase%'
+Answer: 1484
+
+7
+SELECT count(*),chromosome FROM genecoors WHERE geneid IN (SELECT genename FROM geneannotation WHERE annotation LIKE '%kinase%') GROUP BY chromosome
+Answer: 
+411  Chr1
+211	Chr2
+295	Chr3
+240	Chr4
+327	Chr5
+
+8
+DELETE FROM genecoors WHERE chromosome='ChrC'
